@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    {% if not voting_completed %}
+        <h5>Осталось времени <span class="badge badge-secondary">{{ time_lost }}</span></h5>
+
+    {% else %}
+        <div class="container">Голосование завершено</div>
+    {% endif %}
+    <div class="row">
+    {% for persona in context %}
+        <form action="" method="post">{% csrf_token %}
+            <div class="col-sm-6">
+                <div class="card" style="width: 18rem;">
+                    {% if persona.victory %}
+                        <span class="text-danger text-center ">Победитель!!! Голоса:{{ persona.votes }}  </span>
+                    {% else %}
+                        <span class="text-info text-center ">Голоса: {{ persona.votes }}</span>
+                    {% endif %}
+                    <img class="card-img-top" width="200px" height="300px" src="{{ persona.photo }}" alt="Photo">
+                    <div class="card-body ">
+                        <h5 class="card-title ">{{ persona.first_name }} {{ persona.surname }} {{ persona.last_name }}
+                            ,{{ persona.age }} лет</h5>
+                        <p class="card-text ">{{ persona.bio|truncatechars:100 }}.</p>
+                        <input type="hidden" name="pers_id" value="{{ persona.id }}">
+                        {% if not voting_completed %}
+                            <button type="submit" class="btn btn-primary">Голосовать</button>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    {% endfor %}
+
+
+{% endblock content %}

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for vot in voting_list %}
+<a href="{{vot.get_absolute_url}}">{{vot.name}}</a>
+
+{% endfor %}
+</body>
+</html>
