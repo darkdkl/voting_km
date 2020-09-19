@@ -36,8 +36,13 @@ def voting_detail(request, slug):
                "votes":persona.votes.filter(voting=voting).count(),
                 })
         if voting.completed:
+
             context=sorted(context, key=lambda x: x['votes'],reverse=True)
             context[0]['victory']=True
+            voting.winner=f'{context[0].get("first_name")} ' \
+                          f'{context[0].get("surname")} ' \
+                          f'{context[0].get("last_name")}'
+            voting.save()
         timl=voting.date_finish-timezone.now()
         ds, hs, min = timl.days, timl.seconds // 3600, timl.seconds // 60 % 60
         return render(request,

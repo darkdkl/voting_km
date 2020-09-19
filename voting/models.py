@@ -8,6 +8,7 @@ class Voting(models.Model):
     early_count = models.IntegerField(default=0,verbose_name="Голоса для для победы")
     completed=models.BooleanField(default=False,verbose_name="Завершено")
     persons = models.ManyToManyField('Persona', related_name='votings')
+    winner = models.CharField(blank=True,max_length=255,verbose_name="Победитель")
 
     def __str__(self):
         return self.name
@@ -18,6 +19,15 @@ class Voting(models.Model):
 
     def get_absolute_url(self):
         return reverse('voting_detail', kwargs={"slug": self.name})
+
+    @property
+    def get_winners(self):
+        if self.completed:
+            persons=self.persons.all()
+            win_list=[(f'{person.first_name} {person.surname} {person.last_name}'
+                       ,person.votes.filter(voting=self).count()
+                       ) for person in persons]
+            return sorted(win_list, key=lambda x: x[1],reverse=True)
 
 
 class Votes(models.Model):

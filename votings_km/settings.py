@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-
+from dotenv import load_dotenv
+load_dotenv()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -125,3 +126,20 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [STATIC_DIR]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+EMAIL_USE_TLS = True
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_HOST_USER =os.getenv("EMAIL")
+EMAIL_HOST_PASSWORD =os.getenv("EMAIL_PASSWORD")
+EMAIL_PORT =587
+
+REDIS_HOST= "0.0.0.0"
+REDIS_PORT ='6379'
+
+CELERY_BROKER_URL='redis://'+REDIS_HOST+ ":" +REDIS_PORT +"/0"
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout':3600}
+CELERY_RESULT_BACKEND =CELERY_BROKER_URL
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'

@@ -2,17 +2,24 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 from .middleware.current_user import get_current_user
 from .models import Voting,Persona
-# Register your models here.
-
+from .tasks import make_report
+from django import forms
 admin.site.register(Persona)
+
+
+class VotingAdminForm(forms.ModelForm):
+    def clean(self):
+        super().clean()
+        if self.data.get('_orderbutton'):
+            make_report(self.instance.id,get_current_user())
+
+
 
 @admin.register(Voting)
 class VotingAdmin(admin.ModelAdmin):
-
-    def export_to_xls(self, obj):
-        print(obj.id)
-        print(get_current_user())
-        return mark_safe('<button>XLS</button>')
+    form = VotingAdminForm
+    change_form_template = "add_button.html"
 
     list_display = ('name', 'date_start', 'date_finish', 'early_count',
-                    'completed',"export_to_xls")
+                    'completed')
+    readonly_fields = ['winner']
