@@ -1,18 +1,22 @@
 from django.core.mail import EmailMessage
+from votings_km.settings import EMAIL_HOST_USER as sender
 import xlsxwriter
 
 
-
-def send(user_email):
-    email = EmailMessage(
-            'Hello',
-            'Body goes here',
-            'from@example.com',
-            ['to1@example.com'],
+def send(user_email,filename,voting_name):
+    message = EmailMessage(
+            f'Отчет голосования "{voting_name}"',
+            'Приветствуем.Отчет прикреплен к сообщению',
+            sender,
+            [user_email],
             headers={'Message-ID': 'foo'},)
+    message.attach_file("./"+filename)
+    message.send(fail_silently=False)
+
 
 def make_xls(data,name):
-    workbook = xlsxwriter.Workbook(f'reports/{name}.xlsx')
+    filename=f'reports/{name}.xlsx'
+    workbook = xlsxwriter.Workbook(filename)
     persona,votes =map(list, zip(*data))
     letter_name='Победители'
     worksheet = workbook.add_worksheet(letter_name)
@@ -25,3 +29,4 @@ def make_xls(data,name):
                     })
     worksheet.insert_chart('D5', chart)
     workbook.close()
+    return filename
