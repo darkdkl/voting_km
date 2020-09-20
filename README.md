@@ -6,12 +6,16 @@
 
 `
 EMAIL = 'ваш_логин@gmail.com'
+`
+`
 EMAIL_PASSWORD="пароль"
 `
-альтернативно, в settings присвоить новые значения
+или в settings присвоить новые значения
 
 `
 EMAIL_HOST_USER ='ваш_логин@gmail.com'
+`
+`
 EMAIL_HOST_PASSWORD ="пароль"
 `
 ### запуск контейнера с Redis
