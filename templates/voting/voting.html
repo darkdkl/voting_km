@@ -19,7 +19,7 @@
                     {% endif %}
                     <img class="card-img-top" width="200px" height="300px" src="{{ persona.photo }}" alt="Photo">
                     <div class="card-body ">
-                        <h5 class="card-title ">{{ persona.first_name }} {{ persona.surname }} {{ persona.last_name }}
+                        <h5 class="card-title "style="height: 60px">{{ persona.first_name }} {{ persona.surname }} {{ persona.last_name }}
                             ,{{ persona.age }} лет</h5>
                         <p class="card-text ">{{ persona.bio|truncatechars:100 }}.</p>
                         <input type="hidden" name="pers_id" value="{{ persona.id }}">
