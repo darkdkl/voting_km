@@ -1,6 +1,7 @@
 
 ### Приложение для проведения голосования
 ![Screenshot](preview_voting.gif)
+![Screenshot](photo_preview.png)
 ## Настройка почты
 Необходимо создать в корне файл .env с содержимым
 
