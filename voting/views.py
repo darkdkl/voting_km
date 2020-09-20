@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import ListView
@@ -11,6 +13,24 @@ class ActiveVotingView(ListView):
     def get_queryset(self):
         queryset=Voting.objects.filter(completed=False)
         return queryset
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        voting = Voting.objects.filter(completed=False)
+        leaders_voting = [['Лидеры', 'Голоса', ],
+                          ['Нет активных голосований', 0]
+                          ]
+        if voting:
+            all_data_raw = [[[f'{one_voting.name}/ {person.last_name}',
+                                    person.votes.filter(voting=one_voting).count()]
+                                    for person in one_voting.persons.all()]
+                                    for one_voting in voting]
+            leaders_voting=[max(data, key=lambda item: item[1])
+                            for data in all_data_raw]
+            leaders_voting.insert(0, ['Лидеры', 'Голоса', ])
+
+        context["table_data"] = json.dumps(leaders_voting)
+        return context
 
 class CompleteVotingView(ListView):
     template_name = 'voting/complete.html'
