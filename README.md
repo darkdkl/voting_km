@@ -4,20 +4,16 @@
 ## Настройка почты
 Необходимо создать в корне файл .env с содержимым
 
-`
+```
 EMAIL = 'ваш_логин@gmail.com'
-`
-`
 EMAIL_PASSWORD="пароль"
-`
+```
 или в settings присвоить новые значения
 
-`
+```
 EMAIL_HOST_USER ='ваш_логин@gmail.com'
-`
-`
 EMAIL_HOST_PASSWORD ="пароль"
-`
+```
 ### запуск контейнера с Redis
 `
 docker run -d -p 6379:6379 redis
