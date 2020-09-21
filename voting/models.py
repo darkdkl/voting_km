@@ -34,6 +34,7 @@ class Votes(models.Model):
     voting = models.ForeignKey(Voting,on_delete=models.CASCADE)
     persona = models.ForeignKey("Persona",related_name="votes",
                                 on_delete=models.CASCADE)
+    votes_count = models.IntegerField(default=0)
 
 
 class Persona(models.Model):

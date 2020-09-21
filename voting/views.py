@@ -45,7 +45,8 @@ def voting_detail(request, slug):
         persons=voting.persons.all()
         context=[]
         for persona in persons:
-           context.append({
+            votes,_=persona.votes.get_or_create(voting=voting)
+            context.append({
                "id":persona.id,
                "first_name":persona.first_name,
                "surname":persona.surname,
@@ -53,7 +54,7 @@ def voting_detail(request, slug):
                "photo":persona.photo.url,
                "age":persona.age,
                "bio":persona.bio,
-               "votes":persona.votes.filter(voting=voting).count(),
+               "votes":votes.votes_count,
                 })
         if voting.completed:
 
@@ -74,12 +75,12 @@ def voting_detail(request, slug):
     if request.method == 'POST':
         persona_id = request.POST.get("pers_id")
         persona=Persona.objects.get(id=persona_id)
-        slug =(lambda path:path.split('/')[-1])(request.path)
-        voting = Voting.objects.get(name=slug)
-        count_votes=persona.votes.filter(voting=voting).count()
-        if 0 < voting.early_count <= count_votes:
-            voting.completed=True
+        voting = persona.votings.get(name=slug)
+        votes, _ = Votes.objects.get_or_create(voting=voting, persona=persona)
+        if 0 < voting.early_count <= votes.votes_count :
+            voting.completed = True
             voting.save()
         else:
-            Votes.objects.create(voting=voting,persona=persona)
+            votes.votes_count += 1
+            votes.save()
         return redirect(reverse('voting_detail', kwargs={"slug": slug}))
