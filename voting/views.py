@@ -74,7 +74,6 @@ def voting_detail(request, slug):
     if request.method == 'POST':
         persona_id = request.POST.get("pers_id")
         persona=Persona.objects.get(id=persona_id)
-        slug =(lambda path:path.split('/')[-1])(request.path)
         voting = Voting.objects.get(name=slug)
         count_votes=persona.votes.filter(voting=voting).count()
         if 0 < voting.early_count <= count_votes:
